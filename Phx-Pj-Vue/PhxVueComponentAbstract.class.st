@@ -24,21 +24,26 @@ PhxVueComponentAbstract class >> componentDefinition [
 
 	"<javascript: 'return {setup: function(props,context){console.log(props)}}'>"
 
-	componentDefinition
-		ifNil: [ | cd |
-			cd := {('name' -> self name).
-			('props' -> self props).
-			('setup'
-				-> [ :props :context | 
-					| comp |
-					console log: 'Setting up ' with: self name with: ' props: ' with: props.
-					"console log: 'ROUTE ***' with: global useRoute."
-					comp := self newWithProps: props context: context.
-					comp setupReactivity.
-					comp
-						vueInstance: (global at: 'VueCompositionAPI') getCurrentInstance.
-					comp renderBlock	"returning renderBlock as last" ])} asJsObject.
-			componentDefinition := cd ].
+	componentDefinition ifNil: [
+		| cd |
+		cd := {
+			      ('name' -> self name).
+			      ('props' -> self props).
+			      ('setup' -> [ :props :context |
+			       | comp |
+			       console
+				       log: 'Setting up '
+				       with: self name
+				       with: ' props: '
+				       with: props.
+			       "console log: 'ROUTE ***' with: global useRoute."
+			       comp := self newWithProps: props context: context.
+			       comp setupReactivity.
+			       comp vueInstance:
+				       (globalThis at: 'VueCompositionAPI') getCurrentInstance.
+			       comp renderBlock "returning renderBlock as last" ]) }
+			      asJsObject.
+		componentDefinition := cd ].
 	^ componentDefinition
 ]
 
@@ -170,71 +175,86 @@ PhxVueComponentAbstract >> thisContextRootRouter [
 
 { #category : #'vue composition api' }
 PhxVueComponentAbstract >> vcApiH [
-	^ (global at: 'VueCompositionAPI') at: 'h'
+
+	^ (globalThis at: 'VueCompositionAPI') at: 'h'
 ]
 
 { #category : #'vue composition api' }
 PhxVueComponentAbstract >> vcApiInject [
-	^ (global at: 'VueCompositionAPI') at: 'inject'
+
+	^ (globalThis at: 'VueCompositionAPI') at: 'inject'
 ]
 
 { #category : #'vue composition api' }
 PhxVueComponentAbstract >> vcApiMarkRaw: anObject [
-	^ ((global at: 'VueCompositionAPI') at: 'markRaw') value: anObject
+
+	^ ((globalThis at: 'VueCompositionAPI') at: 'markRaw') value:
+		  anObject
 ]
 
 { #category : #'vue composition api' }
 PhxVueComponentAbstract >> vcApiOnActivated: aBlock [
-	^ ((global at: 'VueCompositionAPI') at: 'onActivated')
-		value: aBlock
+
+	^ ((globalThis at: 'VueCompositionAPI') at: 'onActivated') value:
+		  aBlock
 ]
 
 { #category : #'vue composition api' }
 PhxVueComponentAbstract >> vcApiOnBeforeMount: aBlock [
-	^ ((global at: 'VueCompositionAPI') at: 'onBeforeMount')
-		value: aBlock 
+
+	^ ((globalThis at: 'VueCompositionAPI') at: 'onBeforeMount') value:
+		  aBlock
 ]
 
 { #category : #'vue composition api' }
 PhxVueComponentAbstract >> vcApiOnMounted: aBlock [
-	^ ((global at: 'VueCompositionAPI') at: 'onMounted')
-		value: aBlock 
+
+	^ ((globalThis at: 'VueCompositionAPI') at: 'onMounted') value:
+		  aBlock
 ]
 
 { #category : #'vue composition api' }
 PhxVueComponentAbstract >> vcApiOnUpdated: aBlock [
-	^ ((global at: 'VueCompositionAPI') at: 'onUpdated')
-		value: aBlock
+
+	^ ((globalThis at: 'VueCompositionAPI') at: 'onUpdated') value:
+		  aBlock
 ]
 
 { #category : #'vue composition api' }
 PhxVueComponentAbstract >> vcApiProvide [
-	^ (global at: 'VueCompositionAPI') at: 'provide'
+
+	^ (globalThis at: 'VueCompositionAPI') at: 'provide'
 ]
 
 { #category : #'vue composition api' }
 PhxVueComponentAbstract >> vcApiReactive: anObject [
-	^ ((global at: 'VueCompositionAPI') at: 'reactive') value: anObject
+
+	^ ((globalThis at: 'VueCompositionAPI') at: 'reactive') value:
+		  anObject
 ]
 
 { #category : #'vue composition api' }
 PhxVueComponentAbstract >> vcApiRef: anObject [
-	^ ((global at: 'VueCompositionAPI') at: 'ref') value: anObject
+
+	^ ((globalThis at: 'VueCompositionAPI') at: 'ref') value: anObject
 ]
 
 { #category : #'vue composition api' }
 PhxVueComponentAbstract >> vcApiUnref: anObject [
-	^ ((global at: 'VueCompositionAPI') at: 'unref') value: anObject
+
+	^ ((globalThis at: 'VueCompositionAPI') at: 'unref') value: anObject
 ]
 
 { #category : #'vue composition api' }
 PhxVueComponentAbstract >> vcApiWatch [
-	^ (global at: 'VueCompositionAPI') at: 'watch'
+
+	^ (globalThis at: 'VueCompositionAPI') at: 'watch'
 ]
 
 { #category : #'vue composition api' }
 PhxVueComponentAbstract >> vcApiWatchEffect [
-	^ (global at: 'VueCompositionAPI') at: 'watchEffect'
+
+	^ (globalThis at: 'VueCompositionAPI') at: 'watchEffect'
 ]
 
 { #category : #accessing }

@@ -9,26 +9,30 @@ Class {
 
 { #category : #tests }
 PhxVueBridgeTestCase_Basic >> testVueReactivityOutsideComponent [
+
 	(self evalBlock: [ PhxVueBridgeTestCase_Loader promiseLoaded_Vue3 ])
-		then: [ | vue rCollection idx interval |
+		then: [
+			| vue rCollection idx interval |
 			document body innerHTML: ''.
-			vue := global at: 'Vue'.
+			vue := globalThis at: 'Vue'.
 			rCollection := (vue at: 'reactive') value: OrderedCollection new.
-			(vue at: 'watchEffect')
-				value: [ | msg div |
-					msg := String
-						streamContents:
-							[ :ws | rCollection do: [ :each | ws << each ] separatedBy: [ ws << ', ' ] ].
-					div := document createElement: 'DIV'.
-					div innerHTML: msg.
-					document body appendChild: div ].
+			(vue at: 'watchEffect') value: [
+				| msg div |
+				msg := String streamContents: [ :ws |
+					       rCollection
+						       do: [ :each | ws << each ]
+						       separatedBy: [ ws << ', ' ] ].
+				div := document createElement: 'DIV'.
+				div innerHTML: msg.
+				document body appendChild: div ].
 			rCollection add: 'Apple'.
 			idx := 0.
-			interval := global
-				setInterval: [ idx := idx + 1.
-					rCollection add: idx asString.
-				"	idx = 3
+			interval := globalThis
+				            setInterval: [
+					            idx := idx + 1.
+					            rCollection add: idx asString
+					            "	idx = 3
 						ifTrue: [ global clearInterval: interval ]" ]
-				with: 10 ].
+				            with: 10 ].
 	self halt
 ]
