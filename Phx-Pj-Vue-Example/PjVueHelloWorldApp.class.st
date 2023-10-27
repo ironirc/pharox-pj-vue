@@ -1,12 +1,27 @@
 Class {
 	#name : #PjVueHelloWorldApp,
 	#superclass : #PjWebApplication,
+	#traits : 'PhxPjPromiseTrait',
+	#classTraits : 'PhxPjPromiseTrait classTrait',
 	#instVars : [
 		'rectangle',
 		'colour'
 	],
 	#category : #'Phx-Pj-Vue-Example'
 }
+
+{ #category : #'event handling' }
+PjVueHelloWorldApp >> mountHelloWorldComp [
+
+	| vueClass vueRouterClass router compDef |
+	vueClass := globalThis instVarNamed: 'Vue'.
+	vueRouterClass := globalThis instVarNamed: 'VueRouter'.
+	router := vueRouterClass new.
+	compDef := PhxVueHelloWorldComp componentDefinition.
+	compDef at: 'el' put: '#app'.
+	compDef at: 'router' put: router.
+	vueClass new: compDef
+]
 
 { #category : #'event handling' }
 PjVueHelloWorldApp >> onLoad [
@@ -44,7 +59,18 @@ PjVueHelloWorldApp >> promiseAllLibrariesLoaded [
 ]
 
 { #category : #'event handling' }
+PjVueHelloWorldApp >> renderOn: x [
+
+	x div: 'Hello world'
+]
+
+{ #category : #'event handling' }
 PjVueHelloWorldApp >> start [
+
 	super start.
-	self setupDOM
+	self promiseAllLibrariesLoaded then: [
+		| x |
+		x := PjDomBuilder newOnElement: self body.
+		x div: [ x _id: 'app' ]. 
+		self mountHelloWorldComp ]
 ]

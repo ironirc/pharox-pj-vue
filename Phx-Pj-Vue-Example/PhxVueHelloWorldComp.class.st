@@ -6,5 +6,5 @@ Class {
 
 { #category : #rendering }
 PhxVueHelloWorldComp >> renderVueWith: x [
-	x div: 'Hello world'
+	x qBtn:  'Hello world'
 ]
