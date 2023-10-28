@@ -1,6 +1,8 @@
 Class {
 	#name : #PhxVueVNodeBuilder,
 	#superclass : #PjDomController,
+	#traits : 'PhxVue3Trait',
+	#classTraits : 'PhxVue3Trait classTrait',
 	#instVars : [
 		'stack',
 		'createElementFn',
@@ -19,7 +21,7 @@ PhxVueVNodeBuilder class >> compileAll [
 PhxVueVNodeBuilder class >> compileTagFor: qClassName [
 	| sourceCodeMt tag mtVars sourceCode |
 	sourceCodeMt := '{{tag}}: aBlockOrString
-	self tag: ''{{tag}}'' with: aBlockOrString' asMustacheTemplate.
+	self resolvedTag: ''{{tag}}'' with: aBlockOrString' asMustacheTemplate.
 	tag := String
 		streamContents: [ :ws | ws << $q << (qClassName readStream next;  upToEnd) ].
 	mtVars := Dictionary new.
@@ -52,12 +54,14 @@ PhxVueVNodeBuilder >> _attr: anArray [
 
 { #category : #'api-configuration' }
 PhxVueVNodeBuilder >> _attr: attrName set: aValue [
-	self currentNode atSubDef: 'attrs' add: {(attrName -> aValue)}
+"	self currentNode atSubDef: 'attrs' add: {(attrName -> aValue)}"
+	self currentNode defAt: attrName put: aValue.
+	console log: 'set attr' with: attrName with: aValue with: self currentNode
 ]
 
 { #category : #'api-configuration' }
 PhxVueVNodeBuilder >> _class: aStringOrArray [
-	self currentNode atSubDef: 'class' add: aStringOrArray
+	self currentNode defAt: 'class' put: aStringOrArray
 ]
 
 { #category : #'api-configuration' }
@@ -83,7 +87,9 @@ PhxVueVNodeBuilder >> _nativeOn: event do: aBlock [
 
 { #category : #'api-configuration' }
 PhxVueVNodeBuilder >> _on: assocs [
- 	self currentNode atSubDef: 'on' add: assocs
+
+	assocs do: [ :assoc |
+		self _attr: 'on' , assoc key capitalized set: assoc value ]
 ]
 
 { #category : #'api-configuration' }
@@ -270,602 +276,608 @@ PhxVueVNodeBuilder >> privateBuildTagWithConfigBlock: aBlock [
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qAjaxBar: aBlockOrString [
-	self tag: 'qAjaxBar' with: aBlockOrString
+	self resolvedTag: 'qAjaxBar' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qAvatar: aBlockOrString [
-	self tag: 'qAvatar' with: aBlockOrString
+	self resolvedTag: 'qAvatar' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qBadge: aBlockOrString [
-	self tag: 'qBadge' with: aBlockOrString
+	self resolvedTag: 'qBadge' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qBanner: aBlockOrString [
-	self tag: 'qBanner' with: aBlockOrString
+	self resolvedTag: 'qBanner' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qBar: aBlockOrString [
-	self tag: 'qBar' with: aBlockOrString
+	self resolvedTag: 'qBar' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qBreadcrumbs: aBlockOrString [
-	self tag: 'qBreadcrumbs' with: aBlockOrString
+	self resolvedTag: 'qBreadcrumbs' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qBreadcrumbsEl: aBlockOrString [
-	self tag: 'qBreadcrumbsEl' with: aBlockOrString
+	self resolvedTag: 'qBreadcrumbsEl' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qBtn: aBlockOrString [
-	self tag: 'qBtn' with: aBlockOrString
+	self resolvedTag: 'qBtn' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qBtnDropdown: aBlockOrString [
-	self tag: 'qBtnDropdown' with: aBlockOrString
+	self resolvedTag: 'qBtnDropdown' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qBtnGroup: aBlockOrString [
-	self tag: 'qBtnGroup' with: aBlockOrString
+	self resolvedTag: 'qBtnGroup' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qBtnToggle: aBlockOrString [
-	self tag: 'qBtnToggle' with: aBlockOrString
+	self resolvedTag: 'qBtnToggle' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qCard: aBlockOrString [
-	self tag: 'qCard' with: aBlockOrString
+	self resolvedTag: 'qCard' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qCardActions: aBlockOrString [
-	self tag: 'qCardActions' with: aBlockOrString
+	self resolvedTag: 'qCardActions' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qCardSection: aBlockOrString [
-	self tag: 'qCardSection' with: aBlockOrString
+	self resolvedTag: 'qCardSection' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qCarousel: aBlockOrString [
-	self tag: 'qCarousel' with: aBlockOrString
+	self resolvedTag: 'qCarousel' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qCarouselControl: aBlockOrString [
-	self tag: 'qCarouselControl' with: aBlockOrString
+	self resolvedTag: 'qCarouselControl' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qCarouselSlide: aBlockOrString [
-	self tag: 'qCarouselSlide' with: aBlockOrString
+	self resolvedTag: 'qCarouselSlide' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qChatMessage: aBlockOrString [
-	self tag: 'qChatMessage' with: aBlockOrString
+	self resolvedTag: 'qChatMessage' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qCheckbox: aBlockOrString [
-	self tag: 'qCheckbox' with: aBlockOrString
+	self resolvedTag: 'qCheckbox' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qChip: aBlockOrString [
-	self tag: 'qChip' with: aBlockOrString
+	self resolvedTag: 'qChip' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qCircularProgress: aBlockOrString [
-	self tag: 'qCircularProgress' with: aBlockOrString
+	self resolvedTag: 'qCircularProgress' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qColor: aBlockOrString [
-	self tag: 'qColor' with: aBlockOrString
+	self resolvedTag: 'qColor' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qDate: aBlockOrString [
-	self tag: 'qDate' with: aBlockOrString
+	self resolvedTag: 'qDate' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qDialog: aBlockOrString [
-	self tag: 'qDialog' with: aBlockOrString
+	self resolvedTag: 'qDialog' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qDrawer: aBlockOrString [
-	self tag: 'qDrawer' with: aBlockOrString
+	self resolvedTag: 'qDrawer' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qEditor: aBlockOrString [
-	self tag: 'qEditor' with: aBlockOrString
+	self resolvedTag: 'qEditor' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qExpansionItem: aBlockOrString [
-	self tag: 'qExpansionItem' with: aBlockOrString
+	self resolvedTag: 'qExpansionItem' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qFab: aBlockOrString [
-	self tag: 'qFab' with: aBlockOrString
+	self resolvedTag: 'qFab' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qFabAction: aBlockOrString [
-	self tag: 'qFabAction' with: aBlockOrString
+	self resolvedTag: 'qFabAction' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qField: aBlockOrString [
-	self tag: 'qField' with: aBlockOrString
+	self resolvedTag: 'qField' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qFile: aBlockOrString [
-	self tag: 'qFile' with: aBlockOrString
+	self resolvedTag: 'qFile' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qFooter: aBlockOrString [
-	self tag: 'qFooter' with: aBlockOrString
+	self resolvedTag: 'qFooter' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qForm: aBlockOrString [
-	self tag: 'qForm' with: aBlockOrString
+	self resolvedTag: 'qForm' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qHeader: aBlockOrString [
-	self tag: 'qHeader' with: aBlockOrString
+	self resolvedTag: 'qHeader' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qIcon: aBlockOrString [
-	self tag: 'qIcon' with: aBlockOrString
+	self resolvedTag: 'qIcon' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qImg: aBlockOrString [
-	self tag: 'qImg' with: aBlockOrString
+	self resolvedTag: 'qImg' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qInfiniteScroll: aBlockOrString [
-	self tag: 'qInfiniteScroll' with: aBlockOrString
+	self resolvedTag: 'qInfiniteScroll' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qInnerLoading: aBlockOrString [
-	self tag: 'qInnerLoading' with: aBlockOrString
+	self resolvedTag: 'qInnerLoading' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qInput: aBlockOrString [
-	self tag: 'qInput' with: aBlockOrString
+	self resolvedTag: 'qInput' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qIntersection: aBlockOrString [
-	self tag: 'qIntersection' with: aBlockOrString
+	self resolvedTag: 'qIntersection' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qItem: aBlockOrString [
-	self tag: 'qItem' with: aBlockOrString
+	self resolvedTag: 'qItem' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qItemLabel: aBlockOrString [
-	self tag: 'qItemLabel' with: aBlockOrString
+	self resolvedTag: 'qItemLabel' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qItemSection: aBlockOrString [
-	self tag: 'qItemSection' with: aBlockOrString
+	self resolvedTag: 'qItemSection' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qKnob: aBlockOrString [
-	self tag: 'qKnob' with: aBlockOrString
+	self resolvedTag: 'qKnob' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qLayout: aBlockOrString [
-	self tag: 'qLayout' with: aBlockOrString
+	self resolvedTag: 'qLayout' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qLinearProgress: aBlockOrString [
-	self tag: 'qLinearProgress' with: aBlockOrString
+	self resolvedTag: 'qLinearProgress' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qList: aBlockOrString [
-	self tag: 'qList' with: aBlockOrString
+	self resolvedTag: 'qList' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qMarkupTable: aBlockOrString [
-	self tag: 'qMarkupTable' with: aBlockOrString
+	self resolvedTag: 'qMarkupTable' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qMenu: aBlockOrString [
-	self tag: 'qMenu' with: aBlockOrString
+	self resolvedTag: 'qMenu' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qNoSsr: aBlockOrString [
-	self tag: 'qNoSsr' with: aBlockOrString
+	self resolvedTag: 'qNoSsr' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qOptionGroup: aBlockOrString [
-	self tag: 'qOptionGroup' with: aBlockOrString
+	self resolvedTag: 'qOptionGroup' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qPage: aBlockOrString [
-	self tag: 'qPage' with: aBlockOrString
+	self resolvedTag: 'qPage' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qPageContainer: aBlockOrString [
-	self tag: 'qPageContainer' with: aBlockOrString
+	self resolvedTag: 'qPageContainer' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qPageScroller: aBlockOrString [
-	self tag: 'qPageScroller' with: aBlockOrString
+	self resolvedTag: 'qPageScroller' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qPageSticky: aBlockOrString [
-	self tag: 'qPageSticky' with: aBlockOrString
+	self resolvedTag: 'qPageSticky' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qPagination: aBlockOrString [
-	self tag: 'qPagination' with: aBlockOrString
+	self resolvedTag: 'qPagination' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qParallax: aBlockOrString [
-	self tag: 'qParallax' with: aBlockOrString
+	self resolvedTag: 'qParallax' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qPopupEdit: aBlockOrString [
-	self tag: 'qPopupEdit' with: aBlockOrString
+	self resolvedTag: 'qPopupEdit' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qPopupProxy: aBlockOrString [
-	self tag: 'qPopupProxy' with: aBlockOrString
+	self resolvedTag: 'qPopupProxy' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qPullToRefresh: aBlockOrString [
-	self tag: 'qPullToRefresh' with: aBlockOrString
+	self resolvedTag: 'qPullToRefresh' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qRadio: aBlockOrString [
-	self tag: 'qRadio' with: aBlockOrString
+	self resolvedTag: 'qRadio' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qRange: aBlockOrString [
-	self tag: 'qRange' with: aBlockOrString
+	self resolvedTag: 'qRange' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qRating: aBlockOrString [
-	self tag: 'qRating' with: aBlockOrString
+	self resolvedTag: 'qRating' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qResizeObserver: aBlockOrString [
-	self tag: 'qResizeObserver' with: aBlockOrString
+	self resolvedTag: 'qResizeObserver' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qResponsive: aBlockOrString [
-	self tag: 'qResponsive' with: aBlockOrString
+	self resolvedTag: 'qResponsive' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qRouteTab: aBlockOrString [
-	self tag: 'qRouteTab' with: aBlockOrString
+	self resolvedTag: 'qRouteTab' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qScrollArea: aBlockOrString [
-	self tag: 'qScrollArea' with: aBlockOrString
+	self resolvedTag: 'qScrollArea' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qScrollObserver: aBlockOrString [
-	self tag: 'qScrollObserver' with: aBlockOrString
+	self resolvedTag: 'qScrollObserver' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSelect: aBlockOrString [
-	self tag: 'qSelect' with: aBlockOrString
+	self resolvedTag: 'qSelect' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSeparator: aBlockOrString [
-	self tag: 'qSeparator' with: aBlockOrString
+	self resolvedTag: 'qSeparator' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSkeleton: aBlockOrString [
-	self tag: 'qSkeleton' with: aBlockOrString
+	self resolvedTag: 'qSkeleton' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSlideItem: aBlockOrString [
-	self tag: 'qSlideItem' with: aBlockOrString
+	self resolvedTag: 'qSlideItem' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSlideTransition: aBlockOrString [
-	self tag: 'qSlideTransition' with: aBlockOrString
+	self resolvedTag: 'qSlideTransition' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSlider: aBlockOrString [
-	self tag: 'qSlider' with: aBlockOrString
+	self resolvedTag: 'qSlider' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpace: aBlockOrString [
-	self tag: 'qSpace' with: aBlockOrString
+	self resolvedTag: 'qSpace' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinner: aBlockOrString [
-	self tag: 'qSpinner' with: aBlockOrString
+	self resolvedTag: 'qSpinner' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerAudio: aBlockOrString [
-	self tag: 'qSpinnerAudio' with: aBlockOrString
+	self resolvedTag: 'qSpinnerAudio' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerBall: aBlockOrString [
-	self tag: 'qSpinnerBall' with: aBlockOrString
+	self resolvedTag: 'qSpinnerBall' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerBars: aBlockOrString [
-	self tag: 'qSpinnerBars' with: aBlockOrString
+	self resolvedTag: 'qSpinnerBars' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerComment: aBlockOrString [
-	self tag: 'qSpinnerComment' with: aBlockOrString
+	self resolvedTag: 'qSpinnerComment' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerCube: aBlockOrString [
-	self tag: 'qSpinnerCube' with: aBlockOrString
+	self resolvedTag: 'qSpinnerCube' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerDots: aBlockOrString [
-	self tag: 'qSpinnerDots' with: aBlockOrString
+	self resolvedTag: 'qSpinnerDots' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerFacebook: aBlockOrString [
-	self tag: 'qSpinnerFacebook' with: aBlockOrString
+	self resolvedTag: 'qSpinnerFacebook' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerGears: aBlockOrString [
-	self tag: 'qSpinnerGears' with: aBlockOrString
+	self resolvedTag: 'qSpinnerGears' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerGrid: aBlockOrString [
-	self tag: 'qSpinnerGrid' with: aBlockOrString
+	self resolvedTag: 'qSpinnerGrid' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerHearts: aBlockOrString [
-	self tag: 'qSpinnerHearts' with: aBlockOrString
+	self resolvedTag: 'qSpinnerHearts' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerHourglass: aBlockOrString [
-	self tag: 'qSpinnerHourglass' with: aBlockOrString
+	self resolvedTag: 'qSpinnerHourglass' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerInfinity: aBlockOrString [
-	self tag: 'qSpinnerInfinity' with: aBlockOrString
+	self resolvedTag: 'qSpinnerInfinity' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerIos: aBlockOrString [
-	self tag: 'qSpinnerIos' with: aBlockOrString
+	self resolvedTag: 'qSpinnerIos' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerOval: aBlockOrString [
-	self tag: 'qSpinnerOval' with: aBlockOrString
+	self resolvedTag: 'qSpinnerOval' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerPie: aBlockOrString [
-	self tag: 'qSpinnerPie' with: aBlockOrString
+	self resolvedTag: 'qSpinnerPie' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerPuff: aBlockOrString [
-	self tag: 'qSpinnerPuff' with: aBlockOrString
+	self resolvedTag: 'qSpinnerPuff' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerRadio: aBlockOrString [
-	self tag: 'qSpinnerRadio' with: aBlockOrString
+	self resolvedTag: 'qSpinnerRadio' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerRings: aBlockOrString [
-	self tag: 'qSpinnerRings' with: aBlockOrString
+	self resolvedTag: 'qSpinnerRings' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSpinnerTail: aBlockOrString [
-	self tag: 'qSpinnerTail' with: aBlockOrString
+	self resolvedTag: 'qSpinnerTail' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qSplitter: aBlockOrString [
-	self tag: 'qSplitter' with: aBlockOrString
+	self resolvedTag: 'qSplitter' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qStep: aBlockOrString [
-	self tag: 'qStep' with: aBlockOrString
+	self resolvedTag: 'qStep' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qStepper: aBlockOrString [
-	self tag: 'qStepper' with: aBlockOrString
+	self resolvedTag: 'qStepper' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qStepperNavigation: aBlockOrString [
-	self tag: 'qStepperNavigation' with: aBlockOrString
+	self resolvedTag: 'qStepperNavigation' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qTab: aBlockOrString [
-	self tag: 'qTab' with: aBlockOrString
+	self resolvedTag: 'qTab' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qTabPanel: aBlockOrString [
-	self tag: 'qTabPanel' with: aBlockOrString
+	self resolvedTag: 'qTabPanel' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qTabPanels: aBlockOrString [
-	self tag: 'qTabPanels' with: aBlockOrString
+	self resolvedTag: 'qTabPanels' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qTable: aBlockOrString [
-	self tag: 'qTable' with: aBlockOrString
+	self resolvedTag: 'qTable' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qTabs: aBlockOrString [
-	self tag: 'qTabs' with: aBlockOrString
+	self resolvedTag: 'qTabs' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qTd: aBlockOrString [
-	self tag: 'qTd' with: aBlockOrString
+	self resolvedTag: 'qTd' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qTh: aBlockOrString [
-	self tag: 'qTh' with: aBlockOrString
+	self resolvedTag: 'qTh' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qTime: aBlockOrString [
-	self tag: 'qTime' with: aBlockOrString
+	self resolvedTag: 'qTime' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qTimeline: aBlockOrString [
-	self tag: 'qTimeline' with: aBlockOrString
+	self resolvedTag: 'qTimeline' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qTimelineEntry: aBlockOrString [
-	self tag: 'qTimelineEntry' with: aBlockOrString
+	self resolvedTag: 'qTimelineEntry' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qToggle: aBlockOrString [
-	self tag: 'qToggle' with: aBlockOrString
+	self resolvedTag: 'qToggle' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qToolbar: aBlockOrString [
-	self tag: 'qToolbar' with: aBlockOrString
+	self resolvedTag: 'qToolbar' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qToolbarTitle: aBlockOrString [
-	self tag: 'qToolbarTitle' with: aBlockOrString
+	self resolvedTag: 'qToolbarTitle' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qTooltip: aBlockOrString [
-	self tag: 'qTooltip' with: aBlockOrString
+	self resolvedTag: 'qTooltip' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qTr: aBlockOrString [
-	self tag: 'qTr' with: aBlockOrString
+	self resolvedTag: 'qTr' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qTree: aBlockOrString [
-	self tag: 'qTree' with: aBlockOrString
+	self resolvedTag: 'qTree' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qUploader: aBlockOrString [
-	self tag: 'qUploader' with: aBlockOrString
+	self resolvedTag: 'qUploader' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qUploaderAddTrigger: aBlockOrString [
-	self tag: 'qUploaderAddTrigger' with: aBlockOrString
+	self resolvedTag: 'qUploaderAddTrigger' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qUploaderBase: aBlockOrString [
-	self tag: 'qUploaderBase' with: aBlockOrString
+	self resolvedTag: 'qUploaderBase' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qVideo: aBlockOrString [
-	self tag: 'qVideo' with: aBlockOrString
+	self resolvedTag: 'qVideo' with: aBlockOrString
 ]
 
 { #category : #'api-tags-quasar' }
 PhxVueVNodeBuilder >> qVirtualScroll: aBlockOrString [
-	self tag: 'qVirtualScroll' with: aBlockOrString
+	self resolvedTag: 'qVirtualScroll' with: aBlockOrString
+]
+
+{ #category : #'api-tags-quasar' }
+PhxVueVNodeBuilder >> resolvedTag: tag with: aBlockOrString [
+
+	self tag: (self vue resolveComponent: tag ) with: aBlockOrString
 ]
 
 { #category : #'api-tags-vue' }
@@ -882,7 +894,7 @@ PhxVueVNodeBuilder >> span: aBlockOrString [
 PhxVueVNodeBuilder >> tag: tag with: stuff [
 	| vn |
 	stack add: (PhxVueVNodeDefinition newWithTag: tag).
-	(stuff isKindOf: Association)
+	(stuff isKindOf: Association "not ok => ConfigBlock not implemented")
 		ifTrue: [
 			self privateBuildTagWithConfigBlock: stuff key.
 			self privateBuildTagWithBlockOrString: stuff value ]
@@ -967,4 +979,10 @@ PhxVueVNodeBuilder >> vModel: aSymbol bindObject: anObject [
 { #category : #accessing }
 PhxVueVNodeBuilder >> vNode [
 	^ vNode
+]
+
+{ #category : #vue }
+PhxVueVNodeBuilder >> vue [
+
+	^ globalThis at: 'Vue'
 ]

@@ -1,8 +1,8 @@
 Class {
 	#name : #PhxVueComponentAbstract,
 	#superclass : #PjDomController,
-	#traits : 'PhxPjPromiseTrait',
-	#classTraits : 'PhxPjPromiseTrait classTrait',
+	#traits : 'PhxPjPromiseTrait + PhxVue3Trait',
+	#classTraits : 'PhxPjPromiseTrait classTrait + PhxVue3Trait classTrait',
 	#instVars : [
 		'vueInstance',
 		'props',
@@ -39,8 +39,8 @@ PhxVueComponentAbstract class >> componentDefinition [
 			       "console log: 'ROUTE ***' with: global useRoute."
 			       comp := self newWithProps: props context: context.
 			       comp setupReactivity.
-			       comp vueInstance:
-				       (globalThis at: 'VueCompositionAPI') getCurrentInstance.
+			       "comp vueInstance:
+				       (globalThis at: 'VueCompositionAPI') getCurrentInstance."
 			       comp renderBlock "returning renderBlock as last" ]) }
 			      asJsObject.
 		componentDefinition := cd ].
@@ -104,7 +104,7 @@ PhxVueComponentAbstract >> props: anObject [
 { #category : #'initialize-release' }
 PhxVueComponentAbstract >> renderBlock [
 	^ [ | x |
-	x := PhxVueVNodeBuilder newOnH: self vcApiH.
+	x := PhxVueVNodeBuilder newOnH: self h.
 	x currentComponent: self.
 	self renderVueWith: x.
 	x vNode ]
@@ -145,7 +145,7 @@ PhxVueComponentAbstract >> rsAt: aSymbol put: aValue [
 
 { #category : #'initialize-release' }
 PhxVueComponentAbstract >> setupReactivity [
-	reactiveState := self vcApiReactive: reactiveState.
+	reactiveState := self vueReactive: reactiveState.
 	"console log: 'ROOT = ' with: self thisContextRoot with: 'on:' with:  self"
 "console
 						log: 'self&this at' , self class name
@@ -173,88 +173,10 @@ PhxVueComponentAbstract >> thisContextRootRouter [
 	
 ]
 
-{ #category : #'vue composition api' }
-PhxVueComponentAbstract >> vcApiH [
+{ #category : #vue }
+PhxVueComponentAbstract >> vue [
 
-	^ (globalThis at: 'VueCompositionAPI') at: 'h'
-]
-
-{ #category : #'vue composition api' }
-PhxVueComponentAbstract >> vcApiInject [
-
-	^ (globalThis at: 'VueCompositionAPI') at: 'inject'
-]
-
-{ #category : #'vue composition api' }
-PhxVueComponentAbstract >> vcApiMarkRaw: anObject [
-
-	^ ((globalThis at: 'VueCompositionAPI') at: 'markRaw') value:
-		  anObject
-]
-
-{ #category : #'vue composition api' }
-PhxVueComponentAbstract >> vcApiOnActivated: aBlock [
-
-	^ ((globalThis at: 'VueCompositionAPI') at: 'onActivated') value:
-		  aBlock
-]
-
-{ #category : #'vue composition api' }
-PhxVueComponentAbstract >> vcApiOnBeforeMount: aBlock [
-
-	^ ((globalThis at: 'VueCompositionAPI') at: 'onBeforeMount') value:
-		  aBlock
-]
-
-{ #category : #'vue composition api' }
-PhxVueComponentAbstract >> vcApiOnMounted: aBlock [
-
-	^ ((globalThis at: 'VueCompositionAPI') at: 'onMounted') value:
-		  aBlock
-]
-
-{ #category : #'vue composition api' }
-PhxVueComponentAbstract >> vcApiOnUpdated: aBlock [
-
-	^ ((globalThis at: 'VueCompositionAPI') at: 'onUpdated') value:
-		  aBlock
-]
-
-{ #category : #'vue composition api' }
-PhxVueComponentAbstract >> vcApiProvide [
-
-	^ (globalThis at: 'VueCompositionAPI') at: 'provide'
-]
-
-{ #category : #'vue composition api' }
-PhxVueComponentAbstract >> vcApiReactive: anObject [
-
-	^ ((globalThis at: 'VueCompositionAPI') at: 'reactive') value:
-		  anObject
-]
-
-{ #category : #'vue composition api' }
-PhxVueComponentAbstract >> vcApiRef: anObject [
-
-	^ ((globalThis at: 'VueCompositionAPI') at: 'ref') value: anObject
-]
-
-{ #category : #'vue composition api' }
-PhxVueComponentAbstract >> vcApiUnref: anObject [
-
-	^ ((globalThis at: 'VueCompositionAPI') at: 'unref') value: anObject
-]
-
-{ #category : #'vue composition api' }
-PhxVueComponentAbstract >> vcApiWatch [
-
-	^ (globalThis at: 'VueCompositionAPI') at: 'watch'
-]
-
-{ #category : #'vue composition api' }
-PhxVueComponentAbstract >> vcApiWatchEffect [
-
-	^ (globalThis at: 'VueCompositionAPI') at: 'watchEffect'
+	^ globalThis at: 'Vue'
 ]
 
 { #category : #accessing }

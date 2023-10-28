@@ -37,6 +37,11 @@ PhxVueVNodeDefinition >> atSubDef: definitionAspect add: aStringOrArray [
 						ifFalse: [ subDef at: def key put: def value ] ] ]
 ]
 
+{ #category : #configuration }
+PhxVueVNodeDefinition >> defAt: key put: aValue [
+	definitionObject at: key put: aValue
+]
+
 { #category : #private }
 PhxVueVNodeDefinition >> evaluateWithCreateElementFunction: createElementFunction [
 	"console log: 'rendering' with: tag with: definitionObject."

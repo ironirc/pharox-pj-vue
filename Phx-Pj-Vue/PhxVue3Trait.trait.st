@@ -9,6 +9,11 @@ PhxVue3Trait >> console [
 ]
 
 { #category : #vue }
+PhxVue3Trait >> h [
+	^ (self vue at: 'h')
+]
+
+{ #category : #vue }
 PhxVue3Trait >> vue [
 	^ self explicitRequirement
 ]
