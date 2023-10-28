@@ -50,6 +50,7 @@ PjVueHelloWorldApp >> quasar [
 PjVueHelloWorldApp >> start [
 
 	super start.
+	self body innerHTML: ''.  "Silly way to get rid of the message -> PharoJS: Develop in Pharo, run in JavaScript  "
 	self promiseAllLibrariesLoaded then: [
 		| x |
 		x := PjDomBuilder newOnElement: self body.
