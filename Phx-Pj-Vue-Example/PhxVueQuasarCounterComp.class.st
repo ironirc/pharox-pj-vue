@@ -20,7 +20,7 @@ PhxVueQuasarCounterComp >> renderVueWith: x [
 	x div: [ x _class: 'column justify-center items-center q-ma-lg'.
     x qCard: [ x _class: 'q-pa-md'.
         x div: [ x _class: 'text-h6 q-my-md'.
-            x << 'This is a counter using vue/quasar and PharoJS' ].
+            x << 'This is a counter using vue3/quasar2 and PharoJS' ].
         x div: [ x _class: 'row items-center'.
             x qBtn: [
                 x _onClick: [ counter value: counter value - 1 ].
