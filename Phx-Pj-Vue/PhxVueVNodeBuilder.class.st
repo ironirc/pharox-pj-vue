@@ -945,27 +945,10 @@ PhxVueVNodeBuilder >> transition: aBlockOrString [
 
 { #category : #api }
 PhxVueVNodeBuilder >> vModel: aSymbol [
-	self _prop: 'value' set: (self currentComponent perform: aSymbol).
-	"console
-		log: 'vModelOnInput:'
-		with: aSymbol
-		with: stack last
-		with: (self currentComponent perform: aSymbol)."
-	self
-		_on:
-			{('input'
-				->
-					[ :anObject | self currentComponent perform: aSymbol , ':' with: anObject ])}.
-	self
-		_nativeOn:
-			{('input'
-				-> [ :ev | 
-					ev stopImmediatePropagation
-					"console log: 'native input: ' with: ev" ]).
-			('change'
-				-> [ :ev | 
-					ev stopImmediatePropagation
-					"console log: 'native change: ' with: ev" ])}
+
+	self currentNode
+		defAt: 'modelValue'
+		put: (self currentComponent instVarNamed: aSymbol) value
 ]
 
 { #category : #api }
@@ -981,6 +964,32 @@ PhxVueVNodeBuilder >> vModel: aSymbol bindObject: anObject [
 			{('input'
 				->
 					[ :aValue | anObject perform: aSymbol , ':' with: aValue ])}.
+	self
+		_nativeOn:
+			{('input'
+				-> [ :ev | 
+					ev stopImmediatePropagation
+					"console log: 'native input: ' with: ev" ]).
+			('change'
+				-> [ :ev | 
+					ev stopImmediatePropagation
+					"console log: 'native change: ' with: ev" ])}
+]
+
+{ #category : #api }
+PhxVueVNodeBuilder >> vModelOld: aSymbol [
+self currentNode defAt: 'modelValue' put: (self currentComponent at: aSymbol).
+"	self _prop: 'v-model' set: (self currentComponent perform: aSymbol)."
+	"console
+		log: 'vModelOnInput:'
+		with: aSymbol
+		with: stack last
+		with: (self currentComponent perform: aSymbol)."
+	self
+		_on:
+			{('input'
+				->
+					[ :anObject | self currentComponent perform: aSymbol , ':' with: anObject ])}.
 	self
 		_nativeOn:
 			{('input'

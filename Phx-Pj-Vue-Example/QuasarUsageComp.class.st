@@ -104,11 +104,11 @@ QuasarUsageComp >> renderLayoutDrawerBasic: x [
 				x _attrs: {'elevated'}.
 				x qToolbar: [
 					x qBtn: [
-						x _onClick: [ drawerLeft value: "drawerLeft not" false ].
+						x _onClick: [ drawerLeft value: drawerLeft value not ].
 						x _attrs: {'flat'. 'round'. 'dense'. 'icon'->'menu'} ].
 					x qToolbarTitle: 'Header'.
 					x qBtn: [
-						x _onClick: [ drawerRight value: true ].
+						x _onClick: [ drawerRight value: drawerRight value not ].
 						x _attrs: {'flat'. 'round'. 'dense'. 'icon'->'menu'} ] ] ].
 			x qDrawer: [
 				x
@@ -125,7 +125,6 @@ QuasarUsageComp >> renderLayoutDrawerBasic: x [
 			x qDrawer: [
 				x
 					vModel: #drawerRight;
-					"_attr: 'v-model' set: 'drawerRight';"
 					_attrs: { 'side'->'right'. 'show-if-above'. 'bordered'. 'width'->200. 'breakpoint'->700. 'elevated' };
 					_class: 'bg-primary text-white'.
 				x qScrollArea: [

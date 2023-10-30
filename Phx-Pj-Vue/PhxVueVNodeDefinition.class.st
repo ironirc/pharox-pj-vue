@@ -46,7 +46,7 @@ PhxVueVNodeDefinition >> defAt: key put: aValue [
 PhxVueVNodeDefinition >> evaluateWithCreateElementFunction: createElementFunction [
 	"console log: 'rendering' with: tag with: definitionObject."
 
-"	console
+	"	console
 		log: 'MAGIC: '
 		with: 'tag/comp: '
 		with: tag
@@ -54,10 +54,11 @@ PhxVueVNodeDefinition >> evaluateWithCreateElementFunction: createElementFunctio
 		with: definitionObject
 		with: 'children: '
 		with: children."
+
 	^ createElementFunction
-		value: tag
-		value: definitionObject
-		value: children
+		  value: tag
+		  value: definitionObject
+		  value: { ('default' -> [ children ]) } asJsObject
 ]
 
 { #category : #'initialize-release' }
