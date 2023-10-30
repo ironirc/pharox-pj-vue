@@ -60,6 +60,18 @@ PhxVueVNodeBuilder >> _attr: attrName set: aValue [
 ]
 
 { #category : #'api-configuration' }
+PhxVueVNodeBuilder >> _attrs: aStringOrArray [
+	aStringOrArray isString
+		ifTrue: [ (' ' split: aStringOrArray)
+				do: [ :each | self currentNode defAt: each put: true ] ]
+		ifFalse: [ aStringOrArray
+				do: [ :def | 
+					def isString
+						ifTrue: [ self currentNode defAt: def put: '' ]
+						ifFalse: [ self currentNode defAt: def key put: def value ] ] ]
+]
+
+{ #category : #'api-configuration' }
 PhxVueVNodeBuilder >> _class: aStringOrArray [
 	self currentNode defAt: 'class' put: aStringOrArray
 ]
@@ -254,6 +266,11 @@ PhxVueVNodeBuilder >> initialize [
 { #category : #'api-tags-vue' }
 PhxVueVNodeBuilder >> keepAlive: aBlockOrString [
 	self tag: 'keepAlive' with: aBlockOrString
+]
+
+{ #category : #'api-tags-html' }
+PhxVueVNodeBuilder >> p: aBlockOrString [ 
+	^self tag: 'p' with: aBlockOrString
 ]
 
 { #category : #private }
