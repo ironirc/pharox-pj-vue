@@ -8,12 +8,36 @@ Class {
 	#category : #'Phx-Pj-Vue-Example'
 }
 
+{ #category : #'accessing rs' }
+QuasarUsageComp >> drawerLeft [
+
+	^self rsAt: #drawerLeft
+]
+
+{ #category : #'accessing rs' }
+QuasarUsageComp >> drawerLeft: aBoolean [
+
+	self rsAt: #drawerLeft put: aBoolean
+]
+
+{ #category : #'accessing rs' }
+QuasarUsageComp >> drawerRight [
+
+	^self rsAt: #drawerRight
+]
+
+{ #category : #'accessing rs' }
+QuasarUsageComp >> drawerRight: aBoolean [
+
+	self rsAt: #drawerRight put: aBoolean
+]
+
 { #category : #'initialize-release' }
 QuasarUsageComp >> initialize [
 
 	super initialize.
-	drawerLeft := self vueRef: true.
-	drawerRight := self vueRef: false
+	self drawerLeft: true.
+	self drawerRight: true.
 ]
 
 { #category : #rendering }
@@ -104,11 +128,11 @@ QuasarUsageComp >> renderLayoutDrawerBasic: x [
 				x _attrs: {'elevated'}.
 				x qToolbar: [
 					x qBtn: [
-						x _onClick: [ drawerLeft value: drawerLeft value not ].
+						x _onClick: [ self drawerLeft: self drawerLeft not ].
 						x _attrs: {'flat'. 'round'. 'dense'. 'icon'->'menu'} ].
 					x qToolbarTitle: 'Header'.
 					x qBtn: [
-						x _onClick: [ drawerRight value: drawerRight value not ].
+						x _onClick: [ self drawerRight: self drawerRight not ].
 						x _attrs: {'flat'. 'round'. 'dense'. 'icon'->'menu'} ] ] ].
 			x qDrawer: [
 				x

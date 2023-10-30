@@ -948,7 +948,9 @@ PhxVueVNodeBuilder >> vModel: aSymbol [
 
 	self currentNode
 		defAt: 'modelValue'
-		put: (self currentComponent instVarNamed: aSymbol) value
+		put: (self currentComponent perform: aSymbol).
+	self currentNode defAt: 'onUpdate:model-value' put: [ :anObject |
+		self currentComponent perform: aSymbol asMutator with: anObject ]
 ]
 
 { #category : #api }
