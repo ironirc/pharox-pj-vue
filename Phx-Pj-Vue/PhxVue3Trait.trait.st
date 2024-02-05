@@ -23,7 +23,7 @@ PhxVue3Trait >> vueComputed: aBlock [
 	^ (self vue at: 'computed') value: aBlock
 ]
 
-{ #category : #utils }
+{ #category : #'vue extra traits' }
 PhxVue3Trait >> vueComputedGet: getBlock set: setBlock [
 
 	^self vueComputed: { 
