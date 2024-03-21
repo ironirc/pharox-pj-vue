@@ -87,6 +87,11 @@ PhxVue3Trait >> vueNewEffectScopeNonDetached [
 ]
 
 { #category : #'vue traits' }
+PhxVue3Trait >> vueNextTick: aBlock [
+	^ (self vue at: 'nextTick') value: aBlock
+]
+
+{ #category : #'vue traits' }
 PhxVue3Trait >> vueReactive: anObject [
 	^ (self vue at: 'reactive') value: anObject
 ]
