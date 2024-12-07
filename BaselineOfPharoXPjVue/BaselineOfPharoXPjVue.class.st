@@ -45,6 +45,6 @@ BaselineOfPharoXPjVue >> postload: aLoader package: aPackageSpec [
 
 { #category : #'private - accessing' }
 BaselineOfPharoXPjVue >> prerequisites: spec [
-	spec baseline: 'PharoXBasics' with: [ spec repository: 'github://ironirc/pharox-pj-basics:main' ].
+	spec baseline: 'PharoXBasics' with: [ spec repository: 'github://ironirc/pharox-pj-basics:pharo12' ].
 
 ]
