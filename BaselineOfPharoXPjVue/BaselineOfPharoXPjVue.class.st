@@ -1,10 +1,11 @@
 Class {
-	#name : #BaselineOfPharoXPjVue,
-	#superclass : #BaselineOf,
-	#category : #BaselineOfPharoXPjVue
+	#name : 'BaselineOfPharoXPjVue',
+	#superclass : 'BaselineOf',
+	#category : 'BaselineOfPharoXPjVue',
+	#package : 'BaselineOfPharoXPjVue'
 }
 
-{ #category : #baselines }
+{ #category : 'baselines' }
 BaselineOfPharoXPjVue >> baseline: spec [
 	<baseline>
 
@@ -19,7 +20,7 @@ BaselineOfPharoXPjVue >> baseline: spec [
 	]
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 BaselineOfPharoXPjVue >> compatibility: spec [
 
 	"Define a 'Compatibility' group that can be used as a dependency later to overcome differences in Pharo releases"
@@ -27,24 +28,24 @@ BaselineOfPharoXPjVue >> compatibility: spec [
 	
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 BaselineOfPharoXPjVue >> groups: spec [
 
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 BaselineOfPharoXPjVue >> packages: spec [
 
 	spec package: 'Phx-Pj-Vue' with: [  ]
 ]
 
-{ #category : #baselines }
+{ #category : 'baselines' }
 BaselineOfPharoXPjVue >> postload: aLoader package: aPackageSpec [
 	
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 BaselineOfPharoXPjVue >> prerequisites: spec [
-	spec baseline: 'PharoXBasics' with: [ spec repository: 'github://ironirc/pharox-pj-basics:pharo12' ].
+	spec baseline: 'PharoXPjBasics' with: [ spec repository: 'github://ironirc/pharox-pj-basics:pharo12' ].
 
 ]
